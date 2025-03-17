@@ -42,6 +42,7 @@ The system works through a pipeline of microservices:
 ## Example
 ![Alt text](./examples.png?raw=true "Diagram")
 </details>
+
 ## How It Works
 
 1. Keywords are added to a Redis queue
