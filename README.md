@@ -16,9 +16,9 @@ This project is inspired by **GitHub’s security practices** specifically how t
 2. Understanding **Atomicity** in Redis cache.
 3. Presenting a **Proof of Concept (POC)** to improve security checks.
 
-## Demo
-![Demo Video](./assets/demo.mp4)
-
+## Demo Video
+https://github.com/uditrajput03/docker-security-poc/releases/tag/0.0.1/demo.mp4
+![Demo](./assets/demo.gif)
 
 ## Architecture
 
