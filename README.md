@@ -9,26 +9,37 @@ A proof-of-concept tool for scanning Docker Hub images to detect sensitive crede
 
 This tool helps identify security vulnerabilities in Docker images where developers may have unknowingly included sensitive credentials in configuration files (like `.env` files). It operates as a set of stateless microservices using Redis queues to coordinate the scanning process.
 
+## Inspiration
+This project is inspired by **GitHub’s security practices** specifically how they periodically scan for security leaks or exposed files (like `.env`) and notify the repository owner to ensure data remains secure.
+## Motivation
+1. Learning **Asynchronous Messaging** or **Event-Driven Architecture**
+2. Understanding **Atomicity** in Redis cache.
+3. Presenting a **Proof of Concept (POC)** to improve security checks.
+
+## Demo
+![Demo Video](./assets/demo.mp4)
+
+
 ## Architecture
 
 The system works through a pipeline of microservices:
 
-1. **Keyword Scanner**: Searches Docker Hub for usernames based on keywords
-2. **Username Scanner**: Retrieves image names for each username
-3. **Image Scanner**: Extracts available tags for each image
-4. **Tag Scanner**: Pulls image `.tar` files and scans for sensitive files
-5. **Alert System**: Sends notifications when credentials are detected (currently via Telegram)
+0. Keyword Scanner: (Depreciated Not included in this repo)
+1. **Username Scanner**: Retrieves image names for each username
+2. **Image Scanner**: Extracts available tags for each image
+3. **Tag Scanner**: Pulls image `.tar` files and scans for sensitive files
+4. **Alert System**: Sends notifications when credentials are detected (currently via Telegram)
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Keyword   │    │  Username   │    │    Image    │    │     Tag     │    │    Alert    │
-│   Scanner   │───►│   Scanner   │───►│   Scanner   │───►│   Scanner   │───►│   System    │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-       │                  │                  │                  │                  │
-       ▼                  ▼                  ▼                  ▼                  ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                      Redis Queues                                        │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│  Username   │    │    Image    │    │     Tag     │    │    Alert    │
+│   Scanner   │───►│   Scanner   │───►│   Scanner   │───►│   System    │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘    
+       │                  │                  │                  │       
+       ▼                  ▼                  ▼                  ▼       
+┌───────────────────────────────────────────────────────────────────────
+│                                      Redis Queues                     │
+└───────────────────────────────────────────────────────────────────────
 ```
 ## Diagram
 <details style="border: 1px solid #ddd; padding: 10px; margin:20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
@@ -37,25 +48,23 @@ The system works through a pipeline of microservices:
   </summary>
 
 ## Diagram
-![Alt text](./diagram.png?raw=true "Diagram")
+Keyword Part is removed for the main repo as it is only used in poc.
+![Alt text](./assets/diagram.png?raw=true "Diagram")
 
 ## Example
-![Alt text](./examples.png?raw=true "Diagram")
+![Alt text](./assets/examples.png?raw=true "Diagram")
 </details>
 
 ## How It Works
 
-1. Keywords are added to a Redis queue
-2. Usernames are extracted from Docker Hub based on these keywords
-3. Images are discovered for each username
-4. Tags are extracted for each image
-5. Images are pulled and scanned for sensitive files
-6. Alerts are sent when credentials are detected
+1. Images are discovered for each username
+2. Tags are extracted for each image
+3. Images are pulled and scanned for sensitive files
+4. Alerts are sent when credentials are detected
 
 ## Components
 
 - `src/getImages.ts`: Retrieves images for a given username
-- `src/getIndexData.ts`: Extracts initial data from Docker Hub
 - `src/getTags.ts`: Retrieves available tags for an image
 - `src/getRedis.ts`: Handles Redis queue operations
 - `src/logger.ts`: Manages logging and alerts
@@ -67,7 +76,9 @@ The system works through a pipeline of microservices:
 2. Install dependencies: `npm install`
 3. Configure Redis connection in your environment
 4. Set up Telegram webhook (optional)
+5. Provide Your username to the index.js
 5. Start the service: `npm start`
+6. Install `skopeo` for downloading image for worker
 
 ## Configuration
 
