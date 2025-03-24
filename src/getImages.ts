@@ -77,6 +77,6 @@ queueHandler('usersource', 'userprocessing', 'usercompleted', async (job: any) =
 })
 
 
-// parseImages('100xdevs').then(data => {
+// parseImages('udiii').then(data => {
 //     console.log(data?.length)
 // });

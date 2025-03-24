@@ -65,4 +65,4 @@ queueHandler('imagesource', 'imageprocessing', 'imagecompleted', async (job) => 
     console.log('Processing tags:', job);
     await queueFeed('workersource', () => parseAllTags(job));
 })
-// parseAllTags('100xdevs/web-app').then(data => console.log(data));
+// parseAllTags('').then(data => console.log(data));
